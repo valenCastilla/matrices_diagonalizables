@@ -1,0 +1,77 @@
+
+# DIAGONALIZACIÓN - CASTILLA VALENTÍN - Practica Computacional #
+
+import numpy as np
+
+
+def diagonalizable(matriz_ingresada):                          # Verifico si es diagonalizable
+    if matriz_ingresada.shape[0] != matriz_ingresada.shape[1]:
+        return False
+    autovalores, autovectores = np.linalg.eig(matriz_ingresada)
+    if np.linalg.matrix_rank(autovectores) == matriz_ingresada.shape[0]:
+        return True
+    return False
+
+
+def diagonal(matriz_ingresada):                          # Genero la atriz diagonal a partir de autovalores
+    autovalores, _ = np.linalg.eig(matriz_ingresada)
+    diagonal = np.diag(autovalores)
+    return diagonal
+
+
+def base_autovectores(matriz_ingresada):                 
+    _, autovectores = np.linalg.eig(matriz_ingresada)
+    return autovectores
+
+
+
+def matriz_base(base, matriz):
+    base_inversa = np.linalg.inv(base)
+    matriz_respecto_base = np.dot(np.dot(base_inversa, matriz), base)
+    return matriz_respecto_base
+
+
+
+def semejantes(matriz1, matriz2):                           # Verifico si dos matrices son semejantes
+    return np.allclose(matriz1, matriz2)
+
+
+
+def diagonalizar_matriz(filas, columnas, matriz):               # FUNCIÓN PRINCIPAL
+    matriz_ingresada = np.array(matriz).reshape(filas, columnas)
+    if diagonalizable(matriz_ingresada):
+        base_generada = base_autovectores(matriz_ingresada)
+        matriz_bas = matriz_base(base_generada, matriz_ingresada)
+        diagonal_generada = diagonal(matriz_ingresada)
+        print("La matriz es diagonalizable")
+        print("La base de la matriz es:")
+        print(base_generada)
+        print("La matriz respecto de la base es:")
+        print(matriz_bas)
+        print("La diagonal de la matriz es:")
+        print(diagonal_generada)
+        if semejantes(matriz_bas, diagonal_generada):
+            print("Las matrices son semejantes.")
+        else:
+            print("Las matrices no son semejantes.")
+    else:
+        print("La matriz no es diagonalizable")
+
+
+
+# diagonalizar_matriz(cant_filas, cant_columnas, matriz)
+
+# Matrices que son diagonalizables
+# diagonalizar_matriz(3, 3, [[1, 2, 3], [0, 1, 4], [5, 6, 0]]) 
+# diagonalizar_matriz(2, 2, [[4, 1], [2, 3]])
+# diagonalizar_matriz(4, 4, [[4, 0, 0, 1], [0, 3, 0, 0], [0, 0, 2, 0], [0, 0, 0, 1]])
+# diagonalizar_matriz(2, 2, [[1, 1], [1, 1]])
+
+
+# Matrices que NO son diagonalizables
+
+# diagonalizar_matriz(2, 2, [[1, 1], [0, 1]])
+# diagonalizar_matriz(3, 3, [[0, 1, 0], [0, 0, 1], [0, 0, 0]])
+# diagonalizar_matriz(4, 4, [[4, 1, 0, 0], [0, 4, 1, 0], [0, 0, 4, 1], [0, 0, 0, 4]])
+# diagonalizar_matriz(2, 2, [[1, 1], [0, 1]])
+
